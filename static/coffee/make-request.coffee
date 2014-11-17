@@ -7,22 +7,13 @@ this.makeRequest = do ->
 
 
   displayData = (data) ->
-    console.log displayElement
-    displayElement.html ""
-
-    if data.feed?.entry?.length
-      for entry in data.feed.entry
-        console.log entry
-        displayElement.append(template.event(entry))
-
-    else
-      displayElement.append("<em>no events</em>")
-
+    displayElement.html(template["event-list"](data.feed))
+    
   # return makeRequest method
   (params) ->
     url = "http://missouristate.info/feeds/calendar.aspx?" +
       "timespan=future&admittance=either" +
-      "&recurrences=distinct&campus=s&alt=json"
+      "&recurrences=none&campus=s&alt=json"
     for key, value of params
       url += "&#{key}=#{reduceParameter(value)}"
 

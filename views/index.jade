@@ -4,28 +4,53 @@ block head
   style.
     .mono { font-family: "Courier New" }
   style.
-    .long-select { height: 50%; min-height: 20em }
-
+    .long-select { height: 50%; min-height: 10em }
+    .check-box { display:inline-block }
+    .check-box>*{margin:.5em}
+    .check-box {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+    .search{padding:.5em 1em}
+  style.
+    tbody tr td, thead tr td { padding: 1em; }
+    .day { border-bottom: 1px solid #dbdbdb; margin-top: 1em }
+    .m-t {width:4em; background: #EEE;padding: 0.5em;}
+    tr h3 {margin: 0}
+    .aut { text-transform: uppercase }
+    .loc {color:green}
 block content
   .container-fluid
     .row
       .col-lg-2.col-sm-3.col-xs-12
         form.form.form-horizontal
-          label(for="sponsors") Select Sponsors
-          select.long-select.form-control#sponsors(multiple)
-            each org in Object.keys(orgs)
-              option(value=orgs[org])!=org
-          label(for="buildings") Select Buildings
-          select.long-select.form-control#buildings(multiple)
-            each building in Object.keys(buildings)
-              option(value=buildings[building])!=building
-          button.btn.btn-primary(type="submit") Search
+          label(for="sponsor_cats") Select Type
+          #sponsor_cats
+            each cat in Object.keys(orgs_cat)
+              .check-box
+                input(type="checkbox" id="check-"+cat value=cat onclick="toggleCat(this.checked,'"+cat+"')")
+                label(for="check-"+cat)!=cat
+          .row
+            .col-xs-6.col-sm-12
+              label(for="sponsors") Select Sponsors
+              select.long-select.form-control#sponsors(multiple)
+                each org in Object.keys(orgs)
+                  option(value=orgs[org] class=orgs_cat_class[orgs[org]])!=org
+            .col-xs-6.col-sm-12
+              label(for="buildings") Select Buildings
+              select.long-select.form-control#buildings(multiple)
+                each building in Object.keys(buildings)
+                  option(value=buildings[building])!=building
+          .text-center.search
+            button.btn.btn-primary(type="submit") Search
       .col-lg-10.col-sm-9.col-xs-12
-        #entry-list.row
+        #entry-list.m-p
 
 block footer
+  script(src="/vendors/moment/moment.min.js")
   script.
     var template = {}
-  script(src="/templates/event.js")
+  script(src="/templates/event-list.js")
   script(src="/coffee/make-request.js")
   script(src="/coffee/main.js")

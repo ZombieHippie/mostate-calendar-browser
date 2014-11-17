@@ -1,0 +1,49 @@
+table.table
+  tbody
+    - var events = locals.entry
+    if events != null && events.length !== 0
+      - console.log(JSON.stringify(events[0],null,2))
+      - var currentDay = null, when, where, x, loc, entlink, temp
+      each evt in events
+        - when = evt.gd$when[0]
+        - where = evt.gd$where[0]
+        //- cal = partial.c
+        - x = moment(when.startTime)
+        - y = x.clone().add(moment(when.endTime)).subtract(x)
+        if currentDay == null || !currentDay.isSame(x, "d")
+          - currentDay = x.clone()
+          tr.day
+            td.no-b(colspan=4)
+              h2=currentDay.format("dddd")
+              p=currentDay.format("MMMM Do")
+        tr
+          td(colspan=3)
+            a(href=evt.link[0].href target="calendar_entry")
+              h3=evt.title.$t
+          td.m-t
+            - temp = x.format("h:mma")
+            h3=temp=="12:00am"?"All day":temp
+        tr
+          td.no-b.text-center(colspan=2 width="50%")
+            //-a.aut(href="/calendar/#{cal.slug}" style="color:" + cal.color)
+              strong
+                small=cal.name
+            //-
+              br
+              small=evt.i.desc
+          td.no-b(colspan=2)
+            - loc = where.valueString
+            - if(typeof loc === "string"){ if(loc.length > 30) { loc = loc.slice(0, 30).replace(/\s\S+$/,"") + "..." } loc += " "}
+            - entlink = where.gd$entryLink
+            if entlink && entlink.gd$entry && entlink.gd$entry.link && entlink.gd$entry.link.length && entlink.gd$entry.link[0].href
+              a(href=entlink.gd$entry.link[0].href target="calendar_entry")
+                small.loc=loc
+            else
+              small.loc=loc
+            small=x.fromNow()
+    else
+      tr
+        td(colspan=4).text-center
+          h3 No events found
+          br
+          br
