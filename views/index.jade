@@ -2,19 +2,30 @@ extends layout
 
 block head
   style.
-    .container { max-width: 750px }
     .mono { font-family: "Courier New" }
+  style.
+    .long-select { height: 50%; min-height: 20em }
 
 block content
-  .container
-    .page-header.text-center
-      h1 n
-      //pre #! hacking/modding/inventing
-      each page, index in views
-        - page = page.slice(0,-5)
-        if index !== 0
-          span &nbsp; - &nbsp;
-        a(href=page)=page
+  .container-fluid
+    .row
+      .col-lg-2.col-sm-3.col-xs-12
+        form.form.form-horizontal
+          label(for="sponsors") Select Sponsors
+          select.long-select.form-control#sponsors(multiple)
+            each org in Object.keys(orgs)
+              option(value=orgs[org])!=org
+          label(for="buildings") Select Buildings
+          select.long-select.form-control#buildings(multiple)
+            each building in Object.keys(buildings)
+              option(value=buildings[building])!=building
+          button.btn.btn-primary(type="submit") Search
+      .col-lg-10.col-sm-9.col-xs-12
+        #entry-list.row
+
 block footer
   script.
-    log("Welcome to the index")
+    var template = {}
+  script(src="/templates/event.js")
+  script(src="/coffee/make-request.js")
+  script(src="/coffee/main.js")
